@@ -1,73 +1,72 @@
+var scoreCount = 0;
+var defaultTime = 10;
+var timeLeft = 0;
+var answer = null;
+
 $(document).ready(function () {
-  $('.countdown').html("<h2>Ready?</h2>");
-  // starting of the game
-  var scoreCount = 0;
-  var defaultTimer = 10;
-  var answer = genQuestion();
+  // initiating the game`
+  startGameOnKeydown();
 
-  // the game structure
-  theGame(defaultTimer);
-
-  $("#timer input").keydown(function () {
-    checkAnswer(answer, scoreCount);
+  $("#timer input").keyup(function () {
+    checkAnswer();
   });
-
-  genQuestion();
 });
 
-// initiating the game`
-function theGame (time) {
+// game timer
+function startGameOnKeydown () {
+  genQuestion()
+
   $('input').one('keydown', function () { //keydown input field start counter
-    gameTimer(time);
+    timeLeft = Math.floor(defaultTime) ;
+
+    var countDownTimer = setInterval(function () {
+      updateTimer(-1);
+
+      if (timeLeft === 0) {
+        clearInterval(countDownTimer);
+        $('.countdown').html("<h2>Game Over</h2>");
+        updateTimer(10)
+        startGameOnKeydown();
+      }
+    }, 1000);
   });
 }
 
-// game timer
-var gameTimer = function (timer) {
-  var countDownTimer = setInterval(function () {
-    var seconds = Math.floor(timer)
-
-    $('.countdown').html("<h2>" + seconds + " secs left</h2>");
-    console.log(seconds)
-    timer--;
-
-    if (seconds === 0) {
-      clearInterval(countDownTimer);
-      $('.countdown').html("<h2>Game Over</h2>");
-    }
-  }, 1000);
+// add time
+function updateTimer (amount) {
+  timeLeft += amount;
+  $('.countdown').html("<h2>" + timeLeft + " secs left</h2>");
 }
 
 // generate question
-var genQuestion = function () {
+function genQuestion () {
   var x = 1;
   var y = 10;
-  var userInput = 0;
   var tempX = getRndInteger(x, y);
   var tempY = getRndInteger(x, y);
   var total = tempX + tempY;
 
   $('h1').html(tempX + "+" + tempY);
 
-  return total;
+  answer = total;
 }
 
 // check input Answer
-var checkAnswer = function (answer, scoreCount) {
-  userInput = $('#timer input').val(); // working
+function checkAnswer () {
+  var userInput = $('#timer input').val(); // working
 
-  if (userInput == answer) { // working
-    console.log(userinput, answer)
-    currentScore(scoreCount);
+  if (userInput == answer) { // working, answer isnt working after one loop
+    currentScore();
     $('#timer input').val('');
     genQuestion();
+    updateTimer(+1);
   };
 };
 
 // append current Score
-function currentScore(count) {
-  count += 1;
-  $('.currentScore').html("<p>Current Score: " + count + "</p>");
+function currentScore() {
+  scoreCount += 1;
+  $('.currentScore').html("<p>Current Score: " + scoreCount + "</p>");
 }
 
 // create random integer
