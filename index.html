@@ -27,10 +27,17 @@
           <p class='currentScore'>Current Score: 0</p>
           <p class='highestScore'>Highest Score: 0</p>
         </div>
-        <div class='col-12' id="timer">
+        <div class='col-12 text-center' id="timer">
           <h2 class='countdown'>Ready?</h2>
           <h1 class='mathQuestion'></h1>
           <input type="number" placeholder="Answer in number"/>
+        </div>
+        <div class='mt-3 mb-1 text-center col-12'>
+          <p>Number Limit:</p>
+          <label class='limit'></label>
+          <div class='slidecontainer'>
+            <input type="range" min='10' max="40" value="5" class='slider' id="range">
+          </div>
         </div>
       </div>
     </div>
