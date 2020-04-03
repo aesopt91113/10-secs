@@ -19,7 +19,6 @@ $(document).ready(function () {
   });
 });
 
-
 // game timer
 function startGameOnKeydown () {
   $('input').one('keydown', function () { //keydown input field start counter
@@ -60,11 +59,54 @@ function genQuestion () {
   var y = $(".slider").val();
   var tempX = getRndInteger(x, y);
   var tempY = getRndInteger(x, y);
-  var total = tempX + tempY;
 
-  $('h1').html(tempX + "+" + tempY);
+  // following for handling operator
+  var operatorHolder = getOperator(); // this return a string
+  var total =  genTotal(operatorHolder, tempX, tempY);
+  console.log(genTotal(operatorHolder, tempX, tempY));
+
+  $('h1').html(tempX + operatorHolder + tempY);
 
   answer = total;
+}
+
+//get Question operator to +-*/
+function genTotal (operatorHolder, tempX, tempY) {
+  switch (operatorHolder) {
+    case "+":
+      return tempX + tempY;
+      break;
+
+    case "-":
+      return tempX - tempY;
+      break;
+
+    case "*":
+      return tempX * tempY;
+      break;
+
+    case "/":
+      return Math.floor(tempX / tempY);
+      break;
+
+    default: return tempX + tempY;
+  }
+};
+
+// generate operator (checked)
+function getOperator (operator) {
+  //$('input .checkbox').click(function () {
+    var operator = [];
+    var checkStatus = $("input[name='operator']:checked"); //this returns an object
+
+    //console.log(checkStatus)
+    $.each(checkStatus, function () {
+      operator.push($(this).val());
+    });
+  //});
+  var num = getRndInteger(0, operator.length - 1)
+
+  return operator[num];
 }
 
 // check input Answer
@@ -93,7 +135,3 @@ function currentScore() {
 function getRndInteger(min, max) {
   return Math.floor(Math.random() * (max - min + 1) ) + min;
 }
-
-
-// my steps:
-// inject high score, show highest score in html (if all time high, POST to server)
