@@ -65,10 +65,21 @@ function genQuestion () {
   var total =  genTotal(operatorHolder, tempX, tempY);
   console.log(genTotal(operatorHolder, tempX, tempY));
 
-  $('h1').html(tempX + operatorHolder + tempY);
+  displayQuestion(operatorHolder, tempX, tempY);
 
   answer = total;
 }
+
+function displayQuestion (operatorHolder, tempX, tempY) {
+  switch (operatorHolder) {
+    case "/":
+      $('h1').html((tempX * tempY) + operatorHolder + tempY);
+      break;
+
+    default: $('h1').html(tempX + operatorHolder + tempY);
+      break;
+  };
+};
 
 //get Question operator to +-*/
 function genTotal (operatorHolder, tempX, tempY) {
@@ -86,7 +97,7 @@ function genTotal (operatorHolder, tempX, tempY) {
       break;
 
     case "/":
-      return Math.floor(tempX / tempY);
+      return ((tempX * tempY) / tempY);
       break;
 
     default: return tempX + tempY;
